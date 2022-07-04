@@ -7,13 +7,6 @@ from logistic.models import Product, Stock
 from logistic.serializers import ProductSerializer, StockSerializer
 
 
-class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = [SearchFilter, DjangoFilterBackend]
-    search_fields = ['title', 'description']
-
-
 class StockFilter(FilterSet):
     products = CharFilter(field_name='products')
 
@@ -28,6 +21,9 @@ class StockSearchFilter(SearchFilter):
 class StockPagination(PageNumberPagination):
     page_size = 3
 
+class ProductPagination(PageNumberPagination):
+    page_size = 3
+
 
 class StockViewSet(ModelViewSet):
     queryset = Stock.objects.all()
@@ -37,3 +33,9 @@ class StockViewSet(ModelViewSet):
     search_fields = ['products__title', 'products__description']
     pagination_class = StockPagination
 
+class ProductViewSet(ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = [SearchFilter, DjangoFilterBackend]
+    search_fields = ['title', 'description']
+    pagination_class = ProductPagination

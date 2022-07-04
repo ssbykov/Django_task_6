@@ -12,7 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockProduct
-        fields = '__all__'
+        fields = ['product', 'quantity', 'price']
 
     def validate_empty_values(self, data):
         return True, data
@@ -45,7 +45,7 @@ class StockSerializer(serializers.ModelSerializer):
         for position in positions:
             StockProduct.objects.update_or_create(
                 stock=stock,
-                product=Product.objects.get(id=position['product']),
+                product=position['product'],
                 defaults={'price': position['price'], 'quantity': position['quantity']}
             )
         return stock
